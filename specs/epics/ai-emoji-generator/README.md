@@ -11,7 +11,7 @@ baseline makes a copy of it somebody else's in one landing.**
 
 | | |
 |---|---|
-| Status | In progress — EM0 on main |
+| Status | In progress — EM1 on main: the site runs on Workers |
 | Upstream | [pondorasti/emojis](https://github.com/pondorasti/emojis) (AGPL-3.0), at `9e6c3f0` (2023-10-19) |
 | Reference | [turso-starter](https://github.com/sourceplane/turso-starter) — Next.js on OpenNext with D1, its migrations and bootstrap; [blob-starter](https://github.com/sourceplane/blob-starter) — an R2 root and a delivery route; [kv-redis-starter](https://github.com/sourceplane/kv-redis-starter) — a KV root |
 | Key | `EM` |

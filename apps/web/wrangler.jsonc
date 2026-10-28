@@ -1,0 +1,39 @@
+// GENERATED from wrangler.template.jsonc by tooling/wire — edit the
+// template, not this file. The committed copy is the fixture render
+// (`pnpm run wire:fixture`); every Orun lane renders its own environment.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ai-emoji-generator-web",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": { "enabled": true },
+  // The emojis (prompt, safety rating, image paths) and the generated API
+  // secret — Cloudflare D1.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "stg-ai-emoji-generator-stage",
+      "database_id": "00000000-0000-0000-0000-000000000001"
+    }
+  ],
+  // The generated images, original and background-removed — Cloudflare R2,
+  // served by the Worker's /api/images route (the bucket is private).
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "stg-ai-emoji-generator-stage"
+    }
+  ],
+  // The per-visitor daily generation limit — Workers KV.
+  "kv_namespaces": [
+    {
+      "binding": "RATE_LIMIT",
+      "id": "00000000000000000000000000000001"
+    }
+  ]
+}
