@@ -4,7 +4,7 @@
 |---|---|---|
 | EM0 — the spec | ✅ | EM-1 |
 | EM1 — the emoji generator on Workers, D1, R2 and KV | ✅ | EM-2 |
-| EM2 — a baseline | planned | EM-3 |
+| EM2 — a baseline | ✅ | EM-3, tagged `baseline-v1` |
 
 ## Departures from the upstream template
 

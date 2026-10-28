@@ -9,7 +9,7 @@ metadata:
 spec:
   title: "Vercel's AI Emoji Generator on Cloudflare Workers, D1, R2 and KV"
   summary: "Vercel's AI Emoji Generator (pondorasti/emojis) — a prompt in, an emoji out: the prompt checked by a safety classifier, drawn by an SDXL model fine-tuned on emojis, its background removed, and every emoji kept in a gallery with related emojis by full-text search — runs on Cloudflare Workers + Static Assets with its emojis in D1, their images in R2 and its daily rate limit in Workers KV, its models on a Replicate account the owner connects after the build and every Replicate webhook verified, inside the Cirrus baseline's repository conventions, and becomes an Orun baseline that takes a new emoji generator from nothing to live on stage and prod in one landing."
-  state: started
+  state: completed
   milestones:
     - name: "EM0 — the spec"
       exitCriteria:
