@@ -1,0 +1,20 @@
+{
+  "cloudflare-d1/dev": {
+    "d1_database_id": "00000000-0000-0000-0000-000000000002",
+    "d1_database_name": "dev-ai-emoji-generator-dev"
+  },
+  "cloudflare-d1/stage": {
+    "d1_database_id": "00000000-0000-0000-0000-000000000001",
+    "d1_database_name": "stg-ai-emoji-generator-stage"
+  },
+  "cloudflare-d1/prod": {
+    "d1_database_id": "00000000-0000-0000-0000-000000000003",
+    "d1_database_name": "prod-ai-emoji-generator-prod"
+  },
+  "cloudflare-r2/dev": { "r2_bucket_name": "dev-ai-emoji-generator-dev" },
+  "cloudflare-r2/stage": { "r2_bucket_name": "stg-ai-emoji-generator-stage" },
+  "cloudflare-r2/prod": { "r2_bucket_name": "prod-ai-emoji-generator-prod" },
+  "cloudflare-kv/dev": { "app_kv_id": "00000000000000000000000000000002" },
+  "cloudflare-kv/stage": { "app_kv_id": "00000000000000000000000000000001" },
+  "cloudflare-kv/prod": { "app_kv_id": "00000000000000000000000000000003" }
+}
