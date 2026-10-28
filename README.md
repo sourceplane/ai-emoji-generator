@@ -11,18 +11,57 @@ owner connects after the build. The emojis are in a **Cloudflare D1**
 database, their images in an **R2** bucket and each visitor's daily limit in
 a **Workers KV** namespace, all three provisioned by Terraform through
 [Orun](https://github.com/sourceplane/orun), the schema applied by
-migrations, deployed by
-[Orun](https://github.com/sourceplane/orun) to stage and prod on every merge.
-Packaging it as an Orun baseline is the next milestone (EM2).
+migrations, and packaged as an **Orun baseline**: one command takes a new
+product from nothing to live on stage and prod, in its own repository, under
+its own name — in ONE landing.
 
 The template's Prisma/PlanetScale queries are D1 prepared statements now,
 its MySQL full-text search an FTS5 index, its Vercel Blob images R2 objects
 the Worker serves, and its Upstash rate limit a KV counter. Every webhook
 Replicate delivers is verified by its signature, its age and a per-emoji
 token before it is read. The site goes live with no Replicate account: the
-gallery serves, and the form says how to connect one.
+gallery serves, and the form says how to connect one. What the baseline
+adds is everything needed to make a copy of it somebody else's, built the
+way [cirrus-baseline](https://github.com/sourceplane/cirrus-baseline) is.
 See [`specs/epics/ai-emoji-generator`](specs/epics/ai-emoji-generator/README.md)
 for the design, the milestones and the as-built status.
+
+## Instantiating a product
+
+```bash
+git clone --depth 1 --branch <baseline-tag> https://github.com/sourceplane/ai-emoji-generator
+cd ai-emoji-generator
+orun new --blueprint repo-blueprint.yaml --out ~/sites/acme-emojis --run-hooks --resume \
+  --set reponame=acme-emojis --set productname="Acme Emojis" \
+  --set githuborg=acme-inc --set subdomain=<workers-dev-subdomain>
+```
+
+Or, once the platform's registry lists it, from the Orun console (Baselines →
+`ai-emoji-generator` → Build). Two phases: **`01-product`** creates the
+repository and lands the whole product as ONE pull request — intent, CI,
+tooling, the D1, R2 and KV roots, the migrations, the site and its tests —
+and one convergence, per environment, applies the database, the bucket and
+the namespace, then the migrations, then deploys the site bound to them; **`02-docs`** records the live deployment
+from probed facts. **[BOOTSTRAP.md](BOOTSTRAP.md)** is the operator guide;
+[docs/phases/](docs/phases/README.md) has a page per phase.
+
+The new repository receives the **product only** — the app, its D1, R2 and
+KV roots, its migrations and their runner, its tests, its CI, its tooling, a README of its
+own and its operating contract — renamed throughout to the product's name,
+repository, Cloudflare Worker, database, bucket and namespace names. None of this repository's
+machinery ships.
+
+| What makes it a baseline | Where |
+|---|---|
+| The console card (inputs, secrets, programme) | `blueprint.yaml` |
+| The build document (modules, phases, hooks) | `repo-blueprint.yaml` |
+| This tree's identity, and the bootstrap's task contracts | `.baseline/` |
+| The rename engine | `tooling/rebrand/rebrand.mjs` |
+| The bootstrap's helpers (deferrals, redeploy marker, work-tree strip) | `tooling/bootstrap/` |
+| The deployment-record renderer | `hooks/render-deployment-docs.sh` |
+| The product's README and context pack | `.baseline/product/README.md`, `ai/context/` |
+| The baseline's tests: contract, wiring, leak, offline bootstrap, end to end | `testing/`, `.github/workflows/baseline.yml` |
+| Cutting a `baseline-vN` tag | `.github/workflows/tag.yml` |
 
 ## What is here (the product)
 
@@ -103,3 +142,5 @@ if the two disagree.
 | Workflow | What it runs | Ships to a product |
 |---|---|---|
 | `ci.yml` | the Orun pipeline, and the only workflow a product carries: `orun plan --changed`, then one job per lane. A pull request runs the verify lanes (packages type-checked, linted, tested and built, both test suites, the site built and dry-deployed per environment), except the bootstrap's own landings (`orun/BASE-*`), where `plan` alone is the check; a merge applies the D1 database, the bucket and the namespace, migrates, then deploys stage → prod. It plans nothing while `intent.yaml` names the placeholder workspace `ws_CHANGE_ME`, as this repository does. A manual run (Orunbase's Deploy button, or Run workflow on `main`) plans the environment and components it names under the push-to-main trigger, so they deploy as a merge deploys them | yes |
+| `baseline.yml` | the baseline's own tiers: contract tests, the wiring path, the blueprint read by the pinned orun, the leak gate, the offline bootstrap with the product's own plan, the product built in the job tree, migrated, dry-deployed and served — with no Replicate account, then against a stand-in Replicate API that delivers signed webhooks | no |
+| `tag.yml` | cuts a `baseline-vN` tag (manual) | no |
