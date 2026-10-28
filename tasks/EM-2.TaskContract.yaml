@@ -1,0 +1,21 @@
+apiVersion: orun.io/v1
+kind: TaskContract
+metadata:
+  name: EM-2
+  title: "The emoji generator on Workers, D1, R2 and KV"
+spec:
+  goal: Vercel's AI Emoji Generator runs as one Cloudflare Worker with Static Assets — its emojis in D1 with full-text search, their images in R2, its daily limit in KV, its models on Replicate once connected and every webhook verified — with its tests, and its README saying how it maps to Vercel
+  affects:
+    - apps/web
+    - packages/db
+    - infra
+    - tests/web
+    - tests/db
+    - tooling/wire
+    - pnpm-lock.yaml
+    - pnpm-workspace.yaml
+    - README.md
+  doneWhen:
+    - pnpm typecheck, lint, test and build are green, and the Worker is within Workers Free's 3 MiB gzipped
+    - wrangler dev serves the gallery and the connect-Replicate form with no token, and with one generates an emoji through a stand-in Replicate API's signed webhooks, refusing forged and stale deliveries
+  gates: []
